@@ -13,10 +13,12 @@ class BaseMapping
 
     protected $searchAnalyzer = 'ik_max_word';
 
-
-    protected $fields = ["tags"];
+    
+    protected $fields;
 
     protected $index;
+
+    protected $type;
 
 
     private function getProperties()
@@ -36,8 +38,8 @@ class BaseMapping
     public function getMappingSetting()
     {
         return [
-            'index' => $this->index[0],
-            'type' => $this->index[1],
+            'index' => $this->index,
+            'type' => $this->type,
             'body' => $this->getProperties()
         ];
     }

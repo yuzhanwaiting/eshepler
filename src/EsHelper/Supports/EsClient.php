@@ -9,63 +9,46 @@ namespace EsHelper\Supports;
 
 use Elasticsearch\ClientBuilder;
 
-class Client
+class EsClient
 {
+
+
     private static $instance = null;
 
 
     private $client;
 
 
+    /**
+     * 构造函数
+     * EsClient constructor.
+     * @param $config
+     */
     private function __construct($config)
     {
         $this->client = $this->setClient($config);
     }
 
+    /**
+     * 构建客户端
+     * @param $host
+     * @return \Elasticsearch\Client
+     */
     private function setClient($host)
     {
         return ClientBuilder::create()->setHosts($host)->build();
     }
 
 
-    public function createIndex($index, $value, $mappingObj, $multi = false)
+    /**
+     * 设置所有配置
+     * @param IndexConfig $indexObj
+     */
+    public function setAll(IndexConfig $indexObj)
     {
-        $this->setMapping($mappingObj);
-        return $this->parseValue($index, $value, $multi);
+        (new IndexSetting($indexObj, $this->client))->run();
     }
 
-    private function setMapping(BaseMapping $mappingObj)
-    {
-        $this->client->indices()->putMapping($mappingObj->getMappingSetting());
-    }
-
-
-    private function parseValue($index, $value, $multi)
-    {
-        $data = [];
-        if ($multi) {
-            $index = array_combine(["_index","_type"], $index);
-            foreach($value as $key => $val) {
-                $data['body'][] = [
-                    'index' => $index
-                ];
-                $data['body'][] = $val;
-            }
-            $response = $this->client->bulk($data);
-        } else {
-            $index = array_combine(["index","type"], $index);
-            $data = array_merge($index, ["body" => $value]);
-            $response = $this->client->index($data);
-        }
-        return $response;
-    }
-
-
-
-    public function updateIndex()
-    {
-
-    }
 
     public function deleteIndex($index, $id)
     {
@@ -74,7 +57,13 @@ class Client
     }
 
 
-    public function search($query, $sort = null)
+    /**
+     * 搜索方法
+     * @param $query
+     * @param null $sort
+     * @return array
+     */
+    public function search($index, $query, $sort = null)
     {
         $params['body'] = [
             'query' => [
@@ -91,10 +80,17 @@ class Client
             $params['body']['sort'] = $order;
         }
 
+        $params = array_merge($params, array_combine(['index', 'type'], $index));
+
         return $this->client->search($params);
     }
 
 
+    /**
+     * 单例
+     * @param null $config
+     * @return EsClient|null
+     */
     public static function getInstance($config = null)
     {
         if (self::$instance == null) {
