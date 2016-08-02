@@ -23,25 +23,28 @@ class BaseMapping
 
     private function getProperties()
     {
-        $properties = [];
-        foreach($this->fields as $key => $val) {
-            $data['properties'][$key] = [
+        $data = [];
+        foreach($this->fields as $val) {
+            $data['properties'][$val] = [
                 'type' => 'string',
                 'analyzer' => $this->analyzer,
                 'search_analyzer' => $this->searchAnalyzer,
                 'boost' => '8'
             ];
         }
-        return $properties;
+        return $data;
     }
 
     public function getMappingSetting()
     {
-        return [
+        $one =  [
             'index' => $this->index,
             'type' => $this->type,
             'body' => $this->getProperties()
         ];
+        
+        return $one;
     }
+
 
 }

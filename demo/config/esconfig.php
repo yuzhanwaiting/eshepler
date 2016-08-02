@@ -8,7 +8,7 @@
 return [
     'hicu' => [
         [
-            'type' => \App\Index\TagIndex::class,
+            'type' => \App\Index\TagsIndex::class,
             'mapping' => \App\Mapping\TagsMapping::class
         ]
     ]

@@ -63,11 +63,13 @@ class EsClient
      * @param null $sort
      * @return array
      */
-    public function search($index, $query, $sort = null)
+    public function search($index, $key, $query, $sort = null)
     {
         $params['body'] = [
             'query' => [
-                'match' => $query
+                'match' => [
+                    $key => $query
+                ]
             ]
         ];
         if ($sort !== null)
@@ -80,8 +82,8 @@ class EsClient
             $params['body']['sort'] = $order;
         }
 
-        $params = array_merge($params, array_combine(['index', 'type'], $index));
-
+        $params = array_merge(array_combine(['index', 'type'], $index), $params);
+        
         return $this->client->search($params);
     }
 

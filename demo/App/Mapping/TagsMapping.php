@@ -13,7 +13,9 @@ class TagsMapping extends BaseMapping
 {
     protected $fields = ["tags"];
 
-    protected $index;
+    protected $index = 'hicu';
 
-    protected $type;
+    protected $type = 'tags';
+
+    
 }

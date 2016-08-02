@@ -34,9 +34,9 @@ class Client
     }
 
 
-    public function search($index, $query, $sort = null)
+    public function search($index, $key, $query,  $sort = null)
     {
-        return $this->client->search($index, $query, $sort);
+        return $this->client->search($index,$key , $query, $sort);
     }
 
 
@@ -67,8 +67,7 @@ class Client
      */
     private function parseConfig($config)
     {
-        foreach($config as $key => $val)
-        {
+        foreach($config as $key => $val) {
             $this->makeIndex($key, $val);
         }
     }

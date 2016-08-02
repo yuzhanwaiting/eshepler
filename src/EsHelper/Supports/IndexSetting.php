@@ -22,9 +22,8 @@ class IndexSetting
 
     private function setMapping()
     {
-        foreach($this->indexObj->getMapping() as $val) {
-            $this->client->indices()->putMapping($val);
-        }
+
+        $this->client->indices()->create($this->indexObj->getMapping());
     }
 
     private function setData()

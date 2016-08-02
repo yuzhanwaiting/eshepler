@@ -15,7 +15,7 @@ class IndexConfig
 
     protected $mappings = [];
 
-    protected $indexInstance;
+    protected $indexInstance = [];
 
     public function __construct($name, $params)
     {
@@ -40,9 +40,10 @@ class IndexConfig
 
     public function getMapping()
     {
-        $mapping = [];
+        $mapping['index'] = $this->name;
         foreach($this->mappings as $val) {
-            array_push($mapping, $val->getMappingSetting());
+            $mapSetting = $val->getMappingSetting();
+            $mapping['body']['mappings'][$mapSetting['type']] = $mapSetting['body'];
         }
         return $mapping;
     }
