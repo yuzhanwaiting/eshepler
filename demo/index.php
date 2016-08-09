@@ -14,24 +14,33 @@ $esconfig = require __DIR__."/config/esconfig.php";
 
 
 
-new \App\Index\TagsIndex();
+
 $host = ['127.0.0.1:9200'];
 
 //初始化客户端
-$client = new \EsHelper\Client($host);
+$client = new \EsHelper\Supports\EsClient($host, $esconfig);
 
 
 
-$index = ["index", "fulltext"];
-$key = "content";
-$response = $client->search($index, $key,  "中国");
-var_dump($response);
+//初始化索引管理
+$manager = $client->getIndexManagenemnt();
 
-//初始化索引
+$manager->delete('hicu');
 
-//$client->initIndices($esconfig)->run();
+$manager->create('hicu');
+
+$manager->indexData('hicu','my_type1');
 
 
 
-//搜索方法
-//$client->search();
+
+//初始化搜索管理
+$searchEngine = $client->getQuery();
+//
+$searchEngine->config('hicu','my_type1');
+////
+$res = $searchEngine->search('tags','中国');
+////
+////
+var_dump($res);
+

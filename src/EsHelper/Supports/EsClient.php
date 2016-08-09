@@ -8,26 +8,45 @@
 namespace EsHelper\Supports;
 
 use Elasticsearch\ClientBuilder;
+use EsHelper\Supports\Client\Client;
+use EsHelper\Supports\Index\IndexManagement;
+use EsHelper\Supports\Index\IndexReposity;
+use EsHelper\Supports\Index\Query;
 
 class EsClient
 {
-
-
-    private static $instance = null;
-
-
+    
     private $client;
+    
+    protected $indexReposity;
 
+    protected $indexManagement;
+
+    protected $query;
 
     /**
      * 构造函数
      * EsClient constructor.
      * @param $config
      */
-    private function __construct($config)
+    public function __construct($host, $indexConfig)
     {
-        $this->client = $this->setClient($config);
+        $this->client = $this->setClient($host);
+
+        //初始化索引配置
+        $this->initIndex($indexConfig);
     }
+
+    /**
+     * 初始化索引
+     * @param $indexConfig
+     */
+    private function initIndex($indexConfig)
+    {
+        //初始化仓库
+        $this->indexReposity = new IndexReposity($indexConfig);
+    }
+
 
     /**
      * 构建客户端
@@ -36,68 +55,28 @@ class EsClient
      */
     private function setClient($host)
     {
-        return ClientBuilder::create()->setHosts($host)->build();
+        return new Client(ClientBuilder::create()->setHosts($host)->build());
     }
 
 
     /**
-     * 设置所有配置
-     * @param IndexConfig $indexObj
+     * 初始化索引管理
+     * @return IndexManagement
      */
-    public function setAll(IndexConfig $indexObj)
+    public function getIndexManagenemnt()
     {
-        (new IndexSetting($indexObj, $this->client))->run();
+        $this->indexManagement = new IndexManagement($this->client, $this->indexReposity);
+        return $this->indexManagement;
     }
-
-
-    public function deleteIndex($index, $id)
-    {
-        $params = array_merge(array_combine(["index","type"], $index), ['id' => $id]);
-        return $this->client->delete($params);
-    }
-
 
     /**
      * 搜索方法
-     * @param $query
-     * @param null $sort
-     * @return array
+     * @return Query
      */
-    public function search($index, $key, $query, $sort = null)
+    public function getQuery()
     {
-        $params['body'] = [
-            'query' => [
-                'match' => [
-                    $key => $query
-                ]
-            ]
-        ];
-        if ($sort !== null)
-        {
-            $order = [];
-            foreach($sort as $key => $val) {
-                $order[$key] = ['order' => $val];
-            }
-
-            $params['body']['sort'] = $order;
-        }
-
-        $params = array_merge(array_combine(['index', 'type'], $index), $params);
-        
-        return $this->client->search($params);
+        $this->query = new Query($this->client);
+        return $this->query;
     }
 
-
-    /**
-     * 单例
-     * @param null $config
-     * @return EsClient|null
-     */
-    public static function getInstance($config = null)
-    {
-        if (self::$instance == null) {
-            self::$instance = new self($config);
-        }
-        return self::$instance;
-    }
 }

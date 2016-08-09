@@ -6,10 +6,5 @@
  * Time: 16:22
  */
 return [
-    'hicu' => [
-        [
-            'type' => \App\Index\TagsIndex::class,
-            'mapping' => \App\Mapping\TagsMapping::class
-        ]
-    ]
+    'hicu' => \App\Index\HicuIndex::class
 ];
