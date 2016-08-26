@@ -8,36 +8,53 @@
 namespace EsHelper\Supports\Index;
 
 
+use EsHelper\Application;
+use EsHelper\Contracts\Base\Bootable;
 
-
-
-use EsHelper\Supports\Client\Client;
-
-class IndexManagement
+class IndexManagement extends Application implements Bootable
 {
-    protected $client;
-
-    protected $indexReposity;
 
     protected $instance = [];
 
-    public function __construct(Client $client, IndexReposity $indexReposity)
+    public function __construct()
     {
-        $this->client = $client;
-        $this->indexReposity = $indexReposity;
+
     }
 
 
-    /**
-     * 创建索引
-     * @param Index $index
-     */
     public function create($name)
     {
-        $setting = $this->instanceIndex($name)->getSetting();
+        $setting = $this->make("client.reposity")->getIndexSetting($name);
 
-        return $this->client->createIndex($setting);
+        return $this->make("client")->createIndex($setting);
     }
+
+
+    public function update($params)
+    {
+
+    }
+
+
+    public function delete($name)
+    {
+        return $this->make("client")->deleteIndex($name);
+    }
+
+    public function stat($params)
+    {
+
+    }
+
+
+    public static function boot($config = null)
+    {
+        //注册索引函数
+        Application::$app->register("client.reposity", IndexReposity::class);
+    }
+
+
+
 
     /**
      * 实例化索引
@@ -50,7 +67,6 @@ class IndexManagement
             $indexname = $this->indexReposity->getIndex($name);
             $this->instance[$name] = new $indexname;
         }
-
 
         return $this->instance[$name];
     }
@@ -75,18 +91,7 @@ class IndexManagement
         }
 
         $this->client->insert($data);
-
     }
 
 
-
-    public function update()
-    {
-
-    }
-
-    public function delete($name)
-    {
-        $this->client->deleteIndex($name);
-    }
 }

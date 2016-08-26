@@ -18,14 +18,11 @@ class Client implements \EsHelper\Contracts\Client\Client
 
     public function createIndex($params)
     {
-
-        return $this->client->indices()->create($params);
-//        if (!$this->checkIndex($params['index'])) {
-//
-//        } else {
-//
-//            return $this->client->indices()->create($params);
-//        }
+        try {
+            $this->client->indices()->create($params);
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
 
@@ -36,13 +33,16 @@ class Client implements \EsHelper\Contracts\Client\Client
 
     public function insert($data)
     {
-        return $this->client->bulk($data);
+        try {
+            $this->client->bulk($data);
+        } catch (\Exception $e) {
+
+        }
     }
 
     public function checkIndex($name)
     {
-        return false;
-        // TODO: Implement checkIndex() method.
+
     }
 
     public function statIndex()
@@ -57,10 +57,15 @@ class Client implements \EsHelper\Contracts\Client\Client
      */
     public function deleteIndex($name)
     {
-        $params = [
-            'index' => $name
-        ];
-        return $this->client->indices()->delete($params);
+        try {
+            $params = [
+                'index' => $name
+            ];
+            $this->client->indices()->delete($params);
+
+        } catch(\Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
 

@@ -14,28 +14,48 @@ $esconfig = require __DIR__."/config/esconfig.php";
 
 
 
-
 $host = ['127.0.0.1:9200'];
 
+$app = new \EsHelper\App($host, $esconfig);
+$client = $app->make("client");
+$reposity = $app->make("reposity");
+
+
+
+
 //初始化客户端
-$client = new \EsHelper\Supports\EsClient($host, $esconfig);
+$client = new \EsHelper\Supports\EsClient($host);
+
+//初始化索引仓库
+$reposity = new \EsHelper\Supports\Index\IndexReposity($esconfig);
 
 
 
-//初始化索引管理
-$manager = $client->getIndexManagenemnt();
 
-$manager->delete('hicu');
 
-$manager->create('hicu');
 
-$manager->indexData('hicu','my_type1');
+//索引管理
+$indexEngine = $client->getEngine("index");
 
+
+$indexEngine->config($reposity);
+
+$indexEngine->delete('hicu');
+
+$indexEngine->create('hicu');
+
+
+
+//资源管理
+$sourceEngine = $client->getEngine("source");
+$sourceEngine->config($reposity);
+$sourceEngine->all()->save();
+$sourceEngine->update()->save();
 
 
 
 //初始化搜索管理
-$searchEngine = $client->getQuery();
+$searchEngine = $client->getEngine("search");
 //
 $searchEngine->config('hicu','my_type1');
 ////

@@ -15,38 +15,24 @@ use EsHelper\Supports\Index\Query;
 
 class EsClient
 {
-    
+
     private $client;
     
-    protected $indexReposity;
+    protected $searchEngine;
 
-    protected $indexManagement;
+    protected $indexEngine;
 
-    protected $query;
+    protected $sourceEngine;
 
     /**
      * 构造函数
      * EsClient constructor.
      * @param $config
      */
-    public function __construct($host, $indexConfig)
+    public function __construct($host)
     {
         $this->client = $this->setClient($host);
-
-        //初始化索引配置
-        $this->initIndex($indexConfig);
     }
-
-    /**
-     * 初始化索引
-     * @param $indexConfig
-     */
-    private function initIndex($indexConfig)
-    {
-        //初始化仓库
-        $this->indexReposity = new IndexReposity($indexConfig);
-    }
-
 
     /**
      * 构建客户端
@@ -60,16 +46,6 @@ class EsClient
 
 
     /**
-     * 初始化索引管理
-     * @return IndexManagement
-     */
-    public function getIndexManagenemnt()
-    {
-        $this->indexManagement = new IndexManagement($this->client, $this->indexReposity);
-        return $this->indexManagement;
-    }
-
-    /**
      * 搜索方法
      * @return Query
      */
@@ -77,6 +53,32 @@ class EsClient
     {
         $this->query = new Query($this->client);
         return $this->query;
+    }
+
+
+    /**
+     * 获得对应的引擎
+     */
+    public function getEngine($name)
+    {
+        $methodName = sprintf("get%sEngine", ucfirst(strtolower($name)));
+        return call_user_func([$this, $methodName]);
+    }
+
+    public function getSearchEngine()
+    {
+        return $this->searchEngine = new Query($this->client);
+    }
+
+
+    public function getIndexEngine()
+    {
+        return $this->indexEngine = new IndexManagement($this->client);
+    }
+
+    public function getSourceEngine()
+    {
+        
     }
 
 }
