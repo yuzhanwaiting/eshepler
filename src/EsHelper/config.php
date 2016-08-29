@@ -26,8 +26,4 @@ return [
             ]
         ]
     ],*/
-
-/*    'reposity' => [
-        'class' => \EsHelper\Supports\Index\IndexReposity::class
-    ]*/
 ];

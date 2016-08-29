@@ -17,7 +17,7 @@ class Query extends Application
 
     protected $client;
 
-    
+
     /**
      * 配置索引和类型
      * @param $index
@@ -41,6 +41,7 @@ class Query extends Application
                 ]
             ]
         ];
+
         if ($sort !== null)
         {
             $order = [];

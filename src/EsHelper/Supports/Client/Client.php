@@ -40,15 +40,6 @@ class Client implements \EsHelper\Contracts\Client\Client
         }
     }
 
-    public function checkIndex($name)
-    {
-
-    }
-
-    public function statIndex()
-    {
-        // TODO: Implement statIndex() method.
-    }
 
     /**
      * 删除索引
@@ -72,5 +63,10 @@ class Client implements \EsHelper\Contracts\Client\Client
     public function search($params)
     {
         return $this->client->search($params);
+    }
+
+    public function existsIndex($name)
+    {
+        // TODO: Implement existsIndex() method.
     }
 }

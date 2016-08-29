@@ -50,6 +50,11 @@ class IndexDefine extends Object
     }
 
 
+    /**
+     * 获取字段定义
+     * @return array
+     * @throws \Exception
+     */
     private function getProperties()
     {
         if ($this->fields === null) {

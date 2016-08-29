@@ -7,18 +7,30 @@
  */
 namespace EsHelper;
 
-
-
-
-
 use EsHelper\Supports\Base\Container;
 
 class Application extends Container
 {
+
+    /**
+     * 应用实例
+     * @var
+     */
     public static $app;
 
+
+    /**
+     * 项目根目录
+     * @var string
+     */
     private static $basePath = __DIR__;
 
+
+    /**
+     * 初始化方法
+     * Application constructor.
+     * @param $config
+     */
     public function __construct($config)
     {
         Application::$app = $this;
@@ -26,6 +38,12 @@ class Application extends Container
         $this->bootstrap($config);
     }
 
+
+    /**
+     * 处理预加载类
+     * @param array $config
+     * @return mixed
+     */
     public function preInit($config = [])
     {
         if ($config)
@@ -33,20 +51,31 @@ class Application extends Container
         return $this->coreInstance();
     }
 
+
+    /**
+     * 预加载核心类
+     * @return mixed
+     */
     public function coreInstance()
     {
         return require_once(self::getBasePath() . "/config.php");
     }
 
+
+    /**
+     * 获取根目录
+     * @return string
+     */
     public static function getBasePath()
     {
         return self::$basePath;
     }
 
 
-
     /**
-     *
+     * 项目启动注册
+     * @param $config
+     * @throws \Exception
      */
     public function bootstrap($config)
     {
@@ -62,6 +91,11 @@ class Application extends Container
     }
 
 
+    /**
+     * 项目启动
+     * @param array $config
+     * @return Application
+     */
     public static function run($config = [])
     {
         return new self($config);

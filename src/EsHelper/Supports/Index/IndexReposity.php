@@ -16,14 +16,14 @@ class IndexReposity extends Application
     protected $container = [];
 
 
-
     public function config($config)
     {
         foreach($config as $key => $val) {
             $this->addReposity($key, $val);
         }
     }
-    
+
+
     /**
      * 将索引添加至仓库
      * @param $className
@@ -34,6 +34,11 @@ class IndexReposity extends Application
     }
 
 
+    /**
+     * 获取索引配置
+     * @param $name
+     * @return mixed
+     */
     public function getIndexSetting($name)
     {
         $className = $this->container[$name];
@@ -41,12 +46,6 @@ class IndexReposity extends Application
 
         return $class->getSetting();
     }
-
-    public static function boot($config = null)
-    {
-        Application::$app->register("client.reposity", IndexReposity::class);
-    }
-
 
 
 }
