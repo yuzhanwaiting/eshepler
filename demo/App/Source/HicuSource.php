@@ -2,14 +2,13 @@
 /**
  * Created by PhpStorm.
  * User: waiting
- * Date: 2016/8/23
- * Time: 15:20
+ * Date: 2016/8/29
+ * Time: 11:46
  */
-namespace EsHelper\Supports\Index;
+namespace App\Source;
 
-class SouceEngine
+class HicuSource
 {
-    
     public function all()
     {
 
@@ -20,7 +19,4 @@ class SouceEngine
     {
 
     }
-
-
-
 }

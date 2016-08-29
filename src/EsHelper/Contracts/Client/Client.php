@@ -13,10 +13,9 @@ interface Client
     public function createIndex($name);
 
     public function updateIndex();
+    
 
-    public function checkIndex($name);
-
-    public function statIndex();
+    public function existsIndex($name);
 
     public function deleteIndex($name);
 

@@ -15,7 +15,7 @@ class IndexDefine extends Object
 
     protected $type = 'my_type';
 
-
+    protected $analyzer = 'ik_max_word';
 
 
     /**
@@ -39,7 +39,7 @@ class IndexDefine extends Object
      */
     public function getSetting()
     {
-        return [
+         return [
             'index' => $this->name,
             'body' => [
                 'mappings' => [
@@ -59,9 +59,10 @@ class IndexDefine extends Object
             foreach ($this->fields as $val) {
                 $properties[$val[0]] = [
                     'type' => $val[1],
-                    'analyzer' => $val[2]
+                    'analyzer' => $val[2] ?: $this->analyzer
                 ];
             }
+
             return ['properties' => $properties];
         }
     }

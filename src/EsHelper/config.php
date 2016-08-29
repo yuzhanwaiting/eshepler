@@ -14,7 +14,7 @@ return [
         ]
     ],
 
-    'logger' => [
+/*    'logger' => [
         'class' => \EsHelper\Supports\Base\Log::class,
         'engine' => [
             'name' => 'monolog',
@@ -25,9 +25,9 @@ return [
 
             ]
         ]
-    ],
+    ],*/
 
-    'reposity' => [
+/*    'reposity' => [
         'class' => \EsHelper\Supports\Index\IndexReposity::class
-    ]
+    ]*/
 ];

@@ -9,9 +9,8 @@ namespace EsHelper\Supports\Index;
 
 
 use EsHelper\Application;
-use EsHelper\Contracts\Base\Bootable;
 
-class IndexManagement extends Application implements Bootable
+class IndexManagement extends Application
 {
 
     protected $instance = [];
@@ -22,35 +21,49 @@ class IndexManagement extends Application implements Bootable
     }
 
 
+
+
+    /**
+     * 创建索引
+     * @param $name
+     * @return mixed
+     * @throws \Exception
+     */
     public function create($name)
     {
         $setting = $this->make("client.reposity")->getIndexSetting($name);
-
         return $this->make("client")->createIndex($setting);
     }
 
 
     public function update($params)
     {
-
+        //TODO:
+        throw new \Exception("非法操作");
     }
 
 
+    /**
+     * 删除索引
+     * @param $name
+     * @return mixed
+     * @throws \Exception
+     */
     public function delete($name)
     {
         return $this->make("client")->deleteIndex($name);
     }
 
-    public function stat($params)
+
+    /**
+     * 检测索引是否存在
+     * @param $name
+     * @return mixed
+     * @throws \Exception
+     */
+    public function exists($name)
     {
-
-    }
-
-
-    public static function boot($config = null)
-    {
-        //注册索引函数
-        Application::$app->register("client.reposity", IndexReposity::class);
+        return $this->make("client")->existsIndex($name);
     }
 
 

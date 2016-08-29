@@ -7,32 +7,30 @@
  */
 namespace EsHelper\Supports\Index;
 
-use EsHelper\Contracts\Client\Client;
+use EsHelper\Application;
 
-class Query
+class Query extends Application
 {
     protected $index;
 
-    protected $type;
+    protected $type = 'my_type';
 
     protected $client;
 
-    public function __construct(Client $client)
-    {
-        $this->client = $client;
-    }
-
-
+    
     /**
      * 配置索引和类型
      * @param $index
      * @param $type
      */
-    public function config($index, $type)
+    public function setIndex($name, $type = 'my_type')
     {
-        $this->index = $index;
+        $this->index = $name;
         $this->type = $type;
+        return $this;
     }
+
+
 
     public function search($fields, $keywords, $sort = null)
     {
@@ -55,6 +53,6 @@ class Query
 
         $params = array_merge(['index' => $this->index, 'type' => $this->type], $params);
 
-        return $this->client->search($params);
+        return $this->make("client")->search($params);
     }
 }

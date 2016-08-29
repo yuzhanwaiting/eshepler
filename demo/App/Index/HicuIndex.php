@@ -8,17 +8,16 @@
 namespace App\Index;
 
 
-use App\Type\TagsType;
-use EsHelper\Supports\Index\Index;
 
-class HicuIndex extends Index
+use EsHelper\Supports\Index\IndexDefine;
+
+class HicuIndex extends IndexDefine
 {
 
-    protected $indexName = 'hicu';
+    protected $name = "hicu";
 
 
-    protected $typesDefine = [
-        'my_type1' => TagsType::class,
+    protected $fields = [
+        ['tags', 'string']
     ];
-
 }

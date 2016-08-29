@@ -14,53 +14,29 @@ $esconfig = require __DIR__."/config/esconfig.php";
 
 
 
+
+
+
 $host = ['127.0.0.1:9200'];
 
-$app = new \EsHelper\App($host, $esconfig);
-$client = $app->make("client");
-$reposity = $app->make("reposity");
+$app = \EsHelper\Application::run();
+
+$indexEngine = $app->make("client.index");
 
 
+$reposity = $app->make("client.reposity");
+
+//配置索引仓库
+$reposity->config($esconfig);
 
 
-//初始化客户端
-$client = new \EsHelper\Supports\EsClient($host);
-
-//初始化索引仓库
-$reposity = new \EsHelper\Supports\Index\IndexReposity($esconfig);
-
-
-
-
-
-
-//索引管理
-$indexEngine = $client->getEngine("index");
-
-
-$indexEngine->config($reposity);
-
-$indexEngine->delete('hicu');
-
-$indexEngine->create('hicu');
-
-
-
-//资源管理
-$sourceEngine = $client->getEngine("source");
-$sourceEngine->config($reposity);
-$sourceEngine->all()->save();
-$sourceEngine->update()->save();
-
-
-
-//初始化搜索管理
-$searchEngine = $client->getEngine("search");
+//$indexEngine->delete("hicu");
 //
-$searchEngine->config('hicu','my_type1');
-////
-$res = $searchEngine->search('tags','中国');
-////
-////
-var_dump($res);
+//$indexEngine->create("hicu");
+
+
+$searchEngine = $app->make("client.query");
+
+$searchEngine->setIndex("hicu");
+
 

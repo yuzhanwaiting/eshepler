@@ -9,7 +9,7 @@ namespace EsHelper\Supports\Base;
 
 use EsHelper\Application;
 use EsHelper\Contracts\Base\Bootable;
-use GuzzleHttp\Ring\Client\StreamHandler;
+use Monolog\Handler\StreamHandler;
 
 class Log extends Object implements Bootable
 {
@@ -18,7 +18,7 @@ class Log extends Object implements Bootable
 
     public function __construct($config)
     {
-        $this->setEngine($config['engine']['name'], $config['engine']['params']);
+        $this->setEngine($config['engine']['name'], $config['engine']['config']);
     }
 
     public function setEngine($name, $params)
@@ -31,7 +31,9 @@ class Log extends Object implements Bootable
     private function setMonolog($params)
     {
         if ($params['driver'] === 'file') {
-            $logHandler = new StreamHandler($params['file']);
+            $filename = $params['path'] . $params['filename'];
+            var_dump($filename);
+            $logHandler = new StreamHandler($filename);
             $this->engine = new Logger("es-log");
             $this->engine->pushHandler($logHandler);
         } else {
@@ -42,7 +44,7 @@ class Log extends Object implements Bootable
 
     public static function boot($config)
     {
-        Application::$app->register("log", $config);
+        Application::$app->register("log", Log::class, $config);
     }
 
 }

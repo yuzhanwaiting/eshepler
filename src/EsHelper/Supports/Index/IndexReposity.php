@@ -15,12 +15,11 @@ class IndexReposity extends Application
 
     protected $container = [];
 
-    protected $config;
 
 
     public function config($config)
     {
-        foreach($this->config as $key => $val) {
+        foreach($config as $key => $val) {
             $this->addReposity($key, $val);
         }
     }
@@ -37,9 +36,17 @@ class IndexReposity extends Application
 
     public function getIndexSetting($name)
     {
-        $class = new $this->container[$name];
+        $className = $this->container[$name];
+        $class = new $className;
 
         return $class->getSetting();
     }
+
+    public static function boot($config = null)
+    {
+        Application::$app->register("client.reposity", IndexReposity::class);
+    }
+
+
 
 }

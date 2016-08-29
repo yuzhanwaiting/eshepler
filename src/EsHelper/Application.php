@@ -26,9 +26,11 @@ class Application extends Container
         $this->bootstrap($config);
     }
 
-    public function preInit($config)
+    public function preInit($config = [])
     {
-        return array_merge($this->coreInstance(), $config);
+        if ($config)
+            return array_merge($this->coreInstance(), $config);
+        return $this->coreInstance();
     }
 
     public function coreInstance()
@@ -40,6 +42,7 @@ class Application extends Container
     {
         return self::$basePath;
     }
+
 
 
     /**
