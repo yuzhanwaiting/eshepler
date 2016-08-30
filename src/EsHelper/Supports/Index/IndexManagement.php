@@ -13,16 +13,6 @@ use EsHelper\Application;
 class IndexManagement extends Application
 {
 
-    protected $instance = [];
-
-    public function __construct()
-    {
-
-    }
-
-
-
-
     /**
      * 创建索引
      * @param $name
@@ -34,6 +24,7 @@ class IndexManagement extends Application
         $setting = $this->make("client.reposity")->getIndexSetting($name);
         return $this->make("client")->createIndex($setting);
     }
+
 
 
     public function update($params)
@@ -55,6 +46,7 @@ class IndexManagement extends Application
     }
 
 
+    
     /**
      * 检测索引是否存在
      * @param $name
@@ -65,27 +57,6 @@ class IndexManagement extends Application
     {
         return $this->make("client")->existsIndex($name);
     }
-
-
-
-
-    /**
-     * 实例化索引
-     * @param $name
-     * @return mixed
-     */
-    private function instanceIndex($name)
-    {
-        if (!$this->instance[$name]) {
-            $indexname = $this->indexReposity->getIndex($name);
-            $this->instance[$name] = new $indexname;
-        }
-
-        return $this->instance[$name];
-    }
-
-
-
 
 
 }

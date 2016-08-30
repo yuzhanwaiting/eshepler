@@ -57,14 +57,11 @@ class Query extends Application
 
     public function search()
     {
-
         if (!$this->condition) {
             throw new \Exception("搜索条件必须");
         } else {
-
             //搜索关键字
             $keyword = array_keys($this->condition)[0];
-
 
 //            构建基本搜索条件
             $query = ["query" => [
@@ -95,7 +92,7 @@ class Query extends Application
 
 //            查询结果
             $result = $this->make("client")->search($params);
-            
+
             //重置查询关键字
             $this->condition = null;
 

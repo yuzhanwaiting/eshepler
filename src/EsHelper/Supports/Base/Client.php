@@ -10,14 +10,18 @@ namespace EsHelper\Supports\Base;
 use Elasticsearch\ClientBuilder;
 use EsHelper\Application;
 use EsHelper\Contracts\Base\Bootable;
+use EsHelper\Contracts\Base\IndexInterface;
+use EsHelper\Contracts\Base\SearchInterface;
+use EsHelper\Contracts\Base\SourceInterface;
 use EsHelper\Supports\Index\IndexManagement;
 use EsHelper\Supports\Index\IndexReposity;
 use EsHelper\Supports\Index\Query;
 use EsHelper\Supports\Lib\Utils;
 
-class Client extends Application implements Bootable,\EsHelper\Contracts\Client\Client
+class Client extends Application implements Bootable,IndexInterface,SearchInterface,SourceInterface
 {
     protected $client;
+
 
     public function __construct(\Elasticsearch\Client $client)
     {
@@ -25,6 +29,10 @@ class Client extends Application implements Bootable,\EsHelper\Contracts\Client\
     }
 
 
+    /**
+     * 创建索引
+     * @param $params
+     */
     public function createIndex($params)
     {
         try {
@@ -35,21 +43,21 @@ class Client extends Application implements Bootable,\EsHelper\Contracts\Client\
     }
 
 
+    /**
+     * 更新索引
+     * @throws \Exception
+     */
     public function updateIndex()
     {
-
-    }
-
-    public function insert($data)
-    {
-        try {
-            return $this->client->bulk($data);
-        } catch (\Exception $e) {
-            
-        }
+        throw new \Exception("暂不支持该方法");
     }
 
 
+    /**
+     * 判断索引是否存在
+     * @param $name
+     * @return bool
+     */
     public function existsIndex($name)
     {
         $params = [
@@ -77,14 +85,56 @@ class Client extends Application implements Bootable,\EsHelper\Contracts\Client\
     }
 
 
+    /**
+     * 插入文档
+     * @param $data
+     * @return array
+     */
+    public function insert($data)
+    {
+        try {
+            return $this->client->bulk($data);
+        } catch (\Exception $e) {
+
+        }
+    }
+
+
+    /**
+     * 删除文档
+     * @param $params
+     * @return array
+     */
+    public function update($params)
+    {
+        return $this->client->update($params);
+    }
+
+    /**
+     * 删除文档
+     * @param $params
+     */
+    public function delete($params)
+    {
+        return $this->client->delete($params);
+    }
+
+
+    /**
+     * 搜索方法
+     * @param $params
+     * @return array
+     */
     public function search($params)
     {
         return $this->client->search($params);
     }
 
 
-
-
+    /**
+     * 启动方法
+     * @param $config
+     */
     public static function boot($config)
     {
         //注册客户端

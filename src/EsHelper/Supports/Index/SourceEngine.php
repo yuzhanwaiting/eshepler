@@ -8,7 +8,6 @@
 namespace EsHelper\Supports\Index;
 
 use EsHelper\Application;
-use EsHelper\Supports\Lib\Utils;
 
 class SourceEngine extends Application
 {
@@ -21,37 +20,53 @@ class SourceEngine extends Application
     protected $id = null;
 
 
+    
 
     function all()
     {
 
     }
 
-
     function update()
     {
 
     }
 
-
-    protected function setIndex($index)
+    /**
+     * 更新单篇文档
+     * @param $id
+     * @param $params
+     * @return mixed
+     * @throws \Exception
+     */
+    public function updateDoc($id, $params)
     {
-        $this->index = $index;
+        $data = [
+            'index' => $this->index,
+            'type' => $this->type,
+            'id' => $id,
+            'body' => [
+                'doc' => $params
+            ]
+        ];
+        return $this->make("client")->update($data);
     }
 
-    protected function setPageSize($pageSize = 50)
-    {
-        $this->pagesize = $pageSize;
-    }
 
-    protected function setType($type = 'my_type')
+    /**
+     * 删除文档
+     * @param $id
+     * @return mixed
+     * @throws \Exception
+     */
+    public function deleteDoc($id)
     {
-        $this->type = $type;
-    }
-
-    protected function setId($id)
-    {
-        $this->id = $id;
+        $data = [
+            'index' => $this->index,
+            'type' => $this->type,
+            'id' => $id
+        ];
+        return $this->make("client")->delete($data);
     }
 
 
@@ -66,7 +81,6 @@ class SourceEngine extends Application
     {
         $data = [];
         foreach($source as $val) {
-
 
             $id = [];
 
@@ -87,14 +101,9 @@ class SourceEngine extends Application
             $data['body'][] = $val;
         }
 
-
-//        Utils::jsonExit($data);
-
-        
         return $this->make("client")->insert($data);
 
     }
-
 
 
     public function config($config)
