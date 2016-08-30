@@ -34,6 +34,9 @@ class Client implements \EsHelper\Contracts\Client\Client
     public function insert($data)
     {
         try {
+
+            var_dump($data);
+            exit;
             $this->client->bulk($data);
         } catch (\Exception $e) {
 

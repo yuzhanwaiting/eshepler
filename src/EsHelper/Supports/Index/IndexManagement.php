@@ -85,26 +85,7 @@ class IndexManagement extends Application
     }
 
 
-    public function indexData($index, $type)
-    {
-        $typeObj = $this->instanceIndex($index)->getType($type);
-        $sourceData = $typeObj->get();
 
-        $data = [];
-        foreach($sourceData as $key => $val)
-        {
-            $data['body'][] = [
-                'index' => [
-                    '_index' => $index,
-                    '_type' => $type,
-                ]
-            ];
-
-            $data['body'][] = $val;
-        }
-
-        $this->client->insert($data);
-    }
 
 
 }

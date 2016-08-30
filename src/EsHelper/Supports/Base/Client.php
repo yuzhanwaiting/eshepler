@@ -13,6 +13,7 @@ use EsHelper\Contracts\Base\Bootable;
 use EsHelper\Supports\Index\IndexManagement;
 use EsHelper\Supports\Index\IndexReposity;
 use EsHelper\Supports\Index\Query;
+use EsHelper\Supports\Lib\Utils;
 
 class Client extends Application implements Bootable,\EsHelper\Contracts\Client\Client
 {
@@ -42,9 +43,9 @@ class Client extends Application implements Bootable,\EsHelper\Contracts\Client\
     public function insert($data)
     {
         try {
-            $this->client->bulk($data);
+            return $this->client->bulk($data);
         } catch (\Exception $e) {
-
+            
         }
     }
 
