@@ -1,0 +1,12 @@
+this is a client that making elasticsearch more easy to use
+
+
+demos places in demos directory
+
+database script to index all documents or update some documents: update.php all.php
+
+
+search demo: search.php
+
+
+index manager: index.php
