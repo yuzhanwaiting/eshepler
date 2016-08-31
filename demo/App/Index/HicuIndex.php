@@ -7,17 +7,26 @@
  */
 namespace App\Index;
 
-
-
 use EsHelper\Supports\Index\IndexDefine;
+
 
 class HicuIndex extends IndexDefine
 {
 
+    /**
+     * 定义索引名称
+     * @var string
+     */
     protected $name = "hicu";
 
 
+    /**
+     * 定义索引字段配置
+     * @var array
+     */
     protected $fields = [
-        ['tags', 'string']
+        ['name', 'string'],
+        ['cid', 'integer' ],
+        ['id', 'integer']
     ];
 }

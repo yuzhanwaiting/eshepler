@@ -10,7 +10,7 @@ namespace EsHelper\Supports\Index;
 
 use EsHelper\Application;
 
-class IndexManagement extends Application
+class IndexEngine extends Application
 {
 
     /**

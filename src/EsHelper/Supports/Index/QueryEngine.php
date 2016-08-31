@@ -9,7 +9,7 @@ namespace EsHelper\Supports\Index;
 
 use EsHelper\Application;
 
-class Query extends Application
+class QueryEngine extends Application
 {
     protected $index;
 
@@ -20,6 +20,7 @@ class Query extends Application
     protected $sorts = null;
 
     protected $condition = null;
+
 
     /**
      * 配置索引和类型
@@ -33,14 +34,23 @@ class Query extends Application
         return $this;
     }
 
-
+    /**
+     * 匹配方法
+     * @param $keyword
+     * @param $value
+     * @return $this
+     */
     public function match($keyword, $value)
     {
         $this->condition[$keyword] = $value;
         return $this;
     }
 
-
+    /**
+     * 过滤方法
+     * @param $params
+     * @return $this
+     */
     public function filter($params)
     {
         $this->filters = $params;
@@ -48,6 +58,11 @@ class Query extends Application
     }
 
 
+    /**
+     * 排序方法
+     * @param $params
+     * @return $this
+     */
     public function sort($params)
     {
         $this->sorts = $params;
@@ -55,10 +70,16 @@ class Query extends Application
     }
 
 
+    /**
+     * 搜索方法
+     * @return mixed
+     * @throws \Exception
+     */
     public function search()
     {
         if (!$this->condition) {
-            throw new \Exception("搜索条件必须");
+//            throw new \Exception("搜索条件必须");
+            $query = [];
         } else {
             //搜索关键字
             $keyword = array_keys($this->condition)[0];
@@ -69,11 +90,15 @@ class Query extends Application
                     $keyword => $this->condition[$keyword]
                 ]
             ]];
+        }
+
 
 //            构建过滤过则
-            $filters = $this->parseFilter() ?: [];
+        $filters = $this->parseFilter() ?: [];
 
-
+        if (!$query && !$filters) {
+            $queryWithSort = [];
+        } else {
 //            构建排序规则
             $sorts = $this->parseSort() ?: [];
 
@@ -81,27 +106,32 @@ class Query extends Application
 //            整体查询条件整理
             $query = ["query" => ["filtered" => array_merge($query, $filters)]];
 
+
             $queryWithSort = array_merge($query, $sorts);
+        }
+
 
 //            最终查询语句
-            $params = [
-                'index' => $this->index,
-                'type' => $this->type,
-                'body' => $queryWithSort
-            ];
+        $params = [
+            'index' => $this->index,
+            'type' => $this->type,
+            'body' => $queryWithSort,
+            'size' => 10000
+        ];
+
 
 //            查询结果
-            $result = $this->make("client")->search($params);
+        $result = $this->make("client")->search($params);
 
-            //重置查询关键字
-            $this->condition = null;
+        //重置查询关键字
+        $this->condition = null;
 
-            //重置查询条件，排序规则
-            $this->filters = null;
-            $this->sorts = null;
+        //重置查询条件，排序规则
+        $this->filters = null;
+        $this->sorts = null;
 
-            return $result;
-        }
+        return $this->make("parser.query")->parse($result);
+
     }
 
 

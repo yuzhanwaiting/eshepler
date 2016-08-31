@@ -6,6 +6,8 @@
  * Time: 15:29
  */
 
+
+//索引示例，支持删除，新增索引
 require_once __DIR__."/vendor/autoload.php";
 
 require_once __DIR__."/App/AutoLoader.php";
@@ -13,11 +15,6 @@ require_once __DIR__."/App/AutoLoader.php";
 $esconfig = require __DIR__."/config/esconfig.php";
 
 
-
-
-
-
-$host = ['127.0.0.1:9200'];
 
 $app = \EsHelper\Application::run();
 
@@ -30,13 +27,7 @@ $reposity = $app->make("client.reposity");
 $reposity->config($esconfig);
 
 
-//$indexEngine->delete("hicu");
-//
-//$indexEngine->create("hicu");
+$indexEngine->delete("hicu");
 
-
-$searchEngine = $app->make("client.query");
-
-$searchEngine->setIndex("hicu");
-
+$indexEngine->create("hicu");
 

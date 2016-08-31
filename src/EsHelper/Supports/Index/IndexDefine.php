@@ -8,6 +8,7 @@
 namespace EsHelper\Supports\Index;
 
 use EsHelper\Supports\Base\Object;
+use EsHelper\Supports\Lib\Utils;
 
 class IndexDefine extends Object
 {
@@ -62,14 +63,25 @@ class IndexDefine extends Object
         } else {
             $properties = [];
             foreach ($this->fields as $val) {
-                $properties[$val[0]] = [
-                    'type' => $val[1],
-                    'analyzer' => $val[2] ?: $this->analyzer
-                ];
+                $properties[$val[0]] = $this->parserField($val);
             }
 
             return ['properties' => $properties];
         }
+    }
+
+    /**
+     * 处理字段
+     * @param $value
+     * @return mixed
+     */
+    public function parserField($value)
+    {
+        $analyzer = [];
+        if ($value[1] == "string") {
+            $analyzer = ["analyzer" => $value[2] ?: $this->analyzer];
+        }
+        return array_merge(["type" => $value[1]], $analyzer);
     }
 
 

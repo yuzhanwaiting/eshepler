@@ -10,7 +10,7 @@ namespace EsHelper\Supports\Index;
 
 use EsHelper\Application;
 
-class IndexReposity extends Application
+class Reposity extends Application
 {
 
     protected $container = [];

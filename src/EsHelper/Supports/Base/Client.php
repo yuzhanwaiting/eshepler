@@ -13,10 +13,9 @@ use EsHelper\Contracts\Base\Bootable;
 use EsHelper\Contracts\Base\IndexInterface;
 use EsHelper\Contracts\Base\SearchInterface;
 use EsHelper\Contracts\Base\SourceInterface;
-use EsHelper\Supports\Index\IndexManagement;
-use EsHelper\Supports\Index\IndexReposity;
-use EsHelper\Supports\Index\Query;
-use EsHelper\Supports\Lib\Utils;
+use EsHelper\Supports\Index\IndexEngine;
+use EsHelper\Supports\Index\Reposity;
+use EsHelper\Supports\Index\QueryEngine;
 
 class Client extends Application implements Bootable,IndexInterface,SearchInterface,SourceInterface
 {
@@ -144,15 +143,15 @@ class Client extends Application implements Bootable,IndexInterface,SearchInterf
 
 
         //注册索引管理器
-        Application::$app->register("client.reposity", IndexReposity::class);
+        Application::$app->register("client.reposity", Reposity::class);
 
 
         //注册索引管理器
-        Application::$app->register("client.index", IndexManagement::class);
+        Application::$app->register("client.index", IndexEngine::class);
 
 
         //注册搜索引擎
-        Application::$app->register("client.query", Query::class);
+        Application::$app->register("client.query", QueryEngine::class);
 
     }
 

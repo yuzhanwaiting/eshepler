@@ -13,7 +13,9 @@ return [
             'port' => '9200'
         ]
     ],
-
+    'parser' => [
+        'class' =>  \EsHelper\Supports\Parser\ParserFactory::class
+    ],
 /*    'logger' => [
         'class' => \EsHelper\Supports\Base\Log::class,
         'engine' => [

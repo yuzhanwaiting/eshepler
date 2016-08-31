@@ -3,7 +3,7 @@
   "description" : "a easy php client for elasticsearch",
   "license" : "Apache License 2.0",
   "require" : {
-    "php" : ">=5.4",
+    "php" : ">=5.5",
     "elasticsearch/elasticsearch": "~2.0",
     "monolog/monolog" : "~1.0"
   },
